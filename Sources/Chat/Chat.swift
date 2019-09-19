@@ -1,3 +1,10 @@
+import ChatYard
+
 struct Chat {
-    var text = "Hello, World!"
+    
+    func work() {
+        let maker = Foldermaker()
+        maker.make()
+    }
+    
 }

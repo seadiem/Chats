@@ -2,23 +2,26 @@ import Foundation
 import Files
 
 
-struct Foldermaker {
+public struct Foldermaker {
     
-    func make() {
+    public init() {}
+    
+    public func make() {
         do {
-            _ = try Folder(path: path)
-        } catch {
-            print("Error folder creating")
+            let folder = try Folder(path: path)
+            _ = try folder.createSubfolder(named: "Chats")
+        } catch let error {
+            print("Error folder creating: \(error)")
         }
     }
     
-    var path: String {
+    public var path: String {
         let dict = ProcessInfo.processInfo.environment
         let path = dict["HOME"]!
-        return "\(path)/Desktop/Chat"
+        return "\(path)/Desktop/"
     }
     
-    var socketpath: String {
+    public var socketpath: String {
         return "\(path)/chatport"
     }
 }
