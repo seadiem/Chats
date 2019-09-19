@@ -21,15 +21,13 @@ public struct ChatClientData {
     }
     
     func listen() {
-        queue.async {
-            while true {
-                do {
-                    var data = Data()
-                    _ = try self.leash.clientSocket.read(into: &data)
-                    self.handler(data)
-                } catch let error {
-                    print(error)
-                }
+        while true {
+            do {
+                var data = Data()
+                _ = try self.leash.clientSocket.read(into: &data)
+                self.handler(data)
+            } catch let error {
+                print(error)
             }
         }
     }    
