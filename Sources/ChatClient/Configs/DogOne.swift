@@ -1,31 +1,31 @@
-// import ChatYard
+import ChatYard
 import Foundation
 
 public struct ChatClientData {
     
     let name: String
-//    let leash: Leash
-//    let handler: (Data) -> Void
-//    let queue: DispatchQueue
+    let leash: Leash
+    let handler: (Data) -> Void
+    let queue: DispatchQueue
     
-    public init(name: String) {
+    public init(name: String, handler: @escaping (Data) -> Void) {
         self.name = name
- //       self.leash = try! Leash()
-//        self.handler = handler
-//        self.queue = DispatchQueue(label: "socket listener")
+        self.leash = try! Leash()
+        self.handler = handler
+        self.queue = DispatchQueue(label: "socket listener")
     }
     
     func send(data: Data) {
-//        do { try leash.clientSocket.write(from: data) }
-//        catch let error { print(error) }
+        do { try leash.clientSocket.write(from: data) }
+        catch let error { print(error) }
     }
     
     func listen() {
         while true {
             do {
                 var data = Data()
-//                _ = try self.leash.clientSocket.read(into: &data)
-//                self.handler(data)
+                _ = try self.leash.clientSocket.read(into: &data)
+                self.handler(data)
             } catch let error {
                 print(error)
             }
@@ -42,7 +42,7 @@ public struct ChatClientData {
 //
 //do {
 //    let dog = try Leash()
-//    
+//
 //    let queue = DispatchQueue(label: "keyboard listen")
 //    queue.async {
 //        keyinput: while true {
@@ -52,12 +52,12 @@ public struct ChatClientData {
 //            catch let error { print(error) }
 //        }
 //    }
-//    
+//
 //    while true {
 //        let incom = try dog.clientSocket.readString()
 //        print("from sever: \(incom ?? "")")
 //    }
-//    
+//
 //} catch let error {
 //    print(error)
 //}
