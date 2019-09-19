@@ -8,9 +8,9 @@ public struct ChatClientData {
     let handler: (Data) -> Void
     let queue: DispatchQueue
     
-    public init(name: String, handler: @escaping (Data) -> Void) throws {
+    public init(name: String, handler: @escaping (Data) -> Void) {
         self.name = name
-        self.leash = try Leash()
+        self.leash = try! Leash()
         self.handler = handler
         self.queue = DispatchQueue(label: "socket listener")
     }
