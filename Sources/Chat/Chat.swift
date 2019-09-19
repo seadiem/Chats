@@ -1,10 +1,11 @@
 import ChatYard
+import ChatClient
 
 struct Chat {
     
     func work() {
-        let maker = Foldermaker()
-        maker.make()
+        let chat = ChatClientString()
+        chat.work()
     }
     
 }

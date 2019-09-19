@@ -8,9 +8,9 @@ public struct ChatClientData {
     let handler: (Data) -> Void
     let queue: DispatchQueue
     
-    public init(name: String, handler: @escaping (Data) -> Void) {
+    public init(name: String, handler: @escaping (Data) -> Void) throws {
         self.name = name
-        self.leash = try! Leash()
+        self.leash = try Leash()
         self.handler = handler
         self.queue = DispatchQueue(label: "socket listener")
     }
@@ -33,31 +33,36 @@ public struct ChatClientData {
     }    
 }
 
-//import ChatYard
-//import Foundation
-//
-//print("Представьтесь:")
-//let message = readLine()
-//var name = message ?? "User"
-//
-//do {
-//    let dog = try Leash()
-//
-//    let queue = DispatchQueue(label: "keyboard listen")
-//    queue.async {
-//        keyinput: while true {
-//            let message = readLine()
-//            guard let line = message else { continue keyinput }
-//            do { try dog.clientSocket.write(from: name + ": " + line) }
-//            catch let error { print(error) }
-//        }
-//    }
-//
-//    while true {
-//        let incom = try dog.clientSocket.readString()
-//        print("from sever: \(incom ?? "")")
-//    }
-//
-//} catch let error {
-//    print(error)
-//}
+public struct ChatClientString {
+    
+    public init() {}
+    
+    public func work() {
+        print("Представьтесь:")
+        let message = readLine()
+        let name = message ?? "User"
+        
+        do {
+            let dog = try Leash()
+        
+            let queue = DispatchQueue(label: "keyboard listen")
+            queue.async {
+                keyinput: while true {
+                    let message = readLine()
+                    guard let line = message else { continue keyinput }
+                    do { try dog.clientSocket.write(from: name + ": " + line) }
+                    catch let error { print(error) }
+                }
+            }
+        
+            while true {
+                let incom = try dog.clientSocket.readString()
+                print("from sever: \(incom ?? "")")
+            }
+        
+        } catch let error {
+            print(error)
+        }
+    }
+}
+

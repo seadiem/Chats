@@ -33,6 +33,6 @@ let package = Package(
             dependencies: ["ChatYard", "Socket"]),
         .target(
             name: "Chat",
-            dependencies: ["ChatYard"]),
+            dependencies: ["ChatYard", "ChatClient"]),
     ]
 )
