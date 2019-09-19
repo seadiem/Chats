@@ -66,3 +66,42 @@ public struct ChatClientString {
     }
 }
 
+public struct ChatClientDataKeyboard {
+    
+    public init() {}
+    
+    public func work() {
+        print("Представьтесь:")
+        let message = readLine()
+        _ = message ?? "User"
+        
+        do {
+            let dog = try Leash()
+        
+            let queue = DispatchQueue(label: "keyboard listen")
+            queue.async {
+                keyinput: while true {
+                    let message = readLine()
+                    guard let line = message else { continue keyinput }
+                    
+                    let bee = Bee(name: line)
+                    let encoder = JSONEncoder()
+                    let data = try! encoder.encode(bee)
+                    
+                    do { try dog.clientSocket.write(from: data)}
+                    catch let error { print(error) }
+                }
+            }
+        
+            while true {
+                var data = Data()
+                _ = try dog.clientSocket.read(into: &data)
+                let restorebee = try! JSONDecoder().decode(Bee.self, from: data)
+                print(restorebee)
+            }
+        
+        } catch let error {
+            print(error)
+        }
+    }
+}

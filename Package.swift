@@ -32,7 +32,10 @@ let package = Package(
             name: "ChatServer",
             dependencies: ["ChatYard", "Socket"]),
         .target(
-            name: "Chat",
-            dependencies: ["ChatYard", "ChatClient"]),
+            name: "Client",
+            dependencies: ["ChatClient"]),
+        .target(
+            name: "Server",
+            dependencies: ["ChatServer"]),
     ]
 )
