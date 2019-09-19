@@ -8,8 +8,8 @@ let package = Package(
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
-            name: "OpenChat",
-            targets: ["ChatServer"]),
+            name: "ChatClient",
+            targets: ["ChatClient"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
