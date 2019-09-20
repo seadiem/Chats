@@ -15,7 +15,7 @@ public struct ChatClientData {
         self.queue = DispatchQueue(label: "socket listener")
     }
     
-    func send(data: Data) {
+    public func send(data: Data) {
         do { try leash.clientSocket.write(from: data) }
         catch let error { print(error) }
     }
