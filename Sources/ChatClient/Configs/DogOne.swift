@@ -20,7 +20,7 @@ public struct ChatClientData {
         catch let error { print(error) }
     }
     
-    func listen() {
+    public func listen() {
         while true {
             do {
                 var data = Data()
