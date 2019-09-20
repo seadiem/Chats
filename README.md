@@ -5,11 +5,19 @@ This repositiry is inintiated for working within IPC cases.
 
 ## Broadcast Chat
 
+Download and navigate into the repository directory.
+- `$ cd Chat`  
+
 Run server first
-- `$ swift run ChatServer`  
+- `$ swift run Server`  
   
-Next run clients as much as you want
-- `$ swift run ChatClient`
-- `$ swift run ChatClient`
-- `$ swift run ChatClient`
+Next run clients as much as you want in new terminal's windows
+- `$ cd Chat`  
+- `$ swift run Client`
+
+- `$ cd Chat`  
+- `$ swift run Client`
+
+- `$ cd Chat`  
+- `$ swift run Client`
 

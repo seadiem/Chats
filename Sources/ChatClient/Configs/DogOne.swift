@@ -73,7 +73,7 @@ public struct ChatClientDataKeyboard {
     public func work() {
         print("Представьтесь:")
         let message = readLine()
-        _ = message ?? "User"
+        let name = message ?? "User"
         
         do {
             let dog = try Leash()
@@ -84,7 +84,7 @@ public struct ChatClientDataKeyboard {
                     let message = readLine()
                     guard let line = message else { continue keyinput }
                     
-                    let bee = Bee(name: line)
+                    let bee = YardMessage(from: name, text: line)
                     let encoder = JSONEncoder()
                     let data = try! encoder.encode(bee)
                     
@@ -96,7 +96,7 @@ public struct ChatClientDataKeyboard {
             while true {
                 var data = Data()
                 _ = try dog.clientSocket.read(into: &data)
-                let restorebee = try! JSONDecoder().decode(Bee.self, from: data)
+                let restorebee = try! JSONDecoder().decode(YardMessage.self, from: data)
                 print(restorebee)
             }
         
