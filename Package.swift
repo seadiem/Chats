@@ -9,7 +9,7 @@ let package = Package(
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
             name: "ChatClient",
-            targets: ["ChatClient"]),
+            targets: ["ChatClient", "Packet"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -37,5 +37,14 @@ let package = Package(
         .target(
             name: "Server",
             dependencies: ["ChatServer"]),
+        .target(
+            name: "GameServer",
+            dependencies: ["ChatYard", "Socket", "Packet"]),
+        .target(
+            name: "GameClient",
+            dependencies: ["ChatYard", "Socket", "Packet"]),
+        .target(
+            name: "Packet",
+            dependencies: []),
     ]
 )
