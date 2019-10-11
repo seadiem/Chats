@@ -21,8 +21,11 @@ public struct ServerDataOneFunction {
                                 var data = Data()
                                 _ = try item.read(into: &data)
                                 
+              
+                                let response = model.command(from: data)
+                                
                                 for item in sockets {
-                                    try item.write(from: data)
+                                    try item.write(from: response)
                                 }
                             } catch let error {
                                 print(error)
@@ -56,8 +59,6 @@ public struct ServerDataOneFunction {
                 }
             }
         }
-
-
 
         do {
             let kennel = try Kennel { $0 ?? "no text" }

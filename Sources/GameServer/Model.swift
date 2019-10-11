@@ -8,33 +8,42 @@ struct Matchgarden {
         case empty
         case onePlayerRequesting(ServerPlayer)
         case matching(ServerMatch)
-    }
-    
-    var state: State {
-        didSet {
-            switch state {
-            case .matching(let match): _ = 6
-            default: break
+        var network: ServerStatus {
+            switch self {
+            case .empty: return .hold
+            default: return .creatingMatch
             }
         }
     }
+    
+    var state: State
     
     init() {
         state = .empty
     }
     
-    mutating func request(from player: ServerPlayer) {
-        switch state {
-        case .empty: state = .onePlayerRequesting(player)
-        case .onePlayerRequesting(let other):
-            let match = ServerMatch(players: [player, other])
-            state = .matching(match)
-        default: break
+    mutating func command(from data: Data) -> Data {
+        let request = try! JSONDecoder().decode(Request.self, from: data)
+        
+        switch request.type {
+        case .pingServer:
+            var responce = Response(domain: .serverStatus)
+            responce.status = state.network
+            return encode(request: responce)
+        case .needMatch:
+            let responce = Response(domain: .error)
+            return encode(request: responce)
+        default:
+            let responce = Response(domain: .error)
+            return encode(request: responce)
         }
+        
     }
     
-    func decode(data: Data) {
-        
+    func encode<Item: Codable>(request: Item) -> Data {
+        let encoder = JSONEncoder()
+        let data = try! encoder.encode(request)
+        return data
     }
     
 }
