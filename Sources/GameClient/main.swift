@@ -1,1 +1,1 @@
-Client().run()
+AppTest().run()

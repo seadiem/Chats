@@ -3,77 +3,52 @@ import Foundation
 import Packet
 
 struct App {
-    
-    struct Player {
-        let name: String
-    }
 
     
-    let player: Player
-    let client: Client
+    let player: ServerPlayer
+    var match: ServerMatch?
+    let client: ChatClientData
     
     
-    init() {
-        player = Player(name: "Ivan")
-        client = Client()
+    init() throws {
+        player = ServerPlayer(name: "Ivan")
+        client = try ChatClientData() { data in 
+            let decoder = JSONDecoder()
+            let response = try! decoder.decode(Response.self, from: data)
+            print("response: \(response)")
+        }
     }
     
     func play() {
-        while true {
-            let line = readLine()
-            guard let command = line else { return }
-            print(command)
-        }
-    }
-    
-}
-    
-
-
-struct Client {
-    
-    func run() {
-
-        let client = try! ChatClientData(name: "First") { data in
-            let packet = try! JSONDecoder().decode(Response.self, from: data)
-            print(packet)
-        }
         
-        let queue = DispatchQueue(label: "socket listener")
-        queue.async {
-            client.listen()
-        }
-        
-        func send<Item: Codable>(request: Item) {
-            let encoder = JSONEncoder()
-            let data = try! encoder.encode(request)
-            client.send(data: data)
+        DispatchQueue.global().async {
+            self.client.listen()
         }
         
         while true {
+            print("input command...")
             let line = readLine()
             guard let command = line else { return }
             switch command {
-            case "ping": break
-//                let request = Request(type: .pingServer)
-//                send(request: request)
+            case "ping":
+                let request = Request(type: .pingServer, player: player)
+                let data = try! JSONEncoder().encode(request)
+                client.send(data: data)
             default: break
             }
         }
+        
     }
 }
 
-
 public struct ChatClientData {
     
-    let name: String
     let leash: Leash
-    let handler: (Data) -> Void
+    let listener: (Data) -> Void
     
-    public init(name: String, handler: @escaping (Data) -> Void) throws {
-        self.name = name
+    public init(listener: @escaping (Data) -> Void) throws {
         self.leash = try Leash()
-        self.handler = handler
+        self.listener = listener
     }
     
     public func send(data: Data) {
@@ -86,10 +61,21 @@ public struct ChatClientData {
             do {
                 var data = Data()
                 _ = try self.leash.clientSocket.read(into: &data)
-                self.handler(data)
+                self.listener(data)
             } catch let error {
                 print(error)
             }
+        }
+    }
+}
+
+struct AppTest {
+    func run() {
+        do {
+            let app = try App()
+            app.play()
+        } catch let error {
+            print(error)
         }
     }
 }

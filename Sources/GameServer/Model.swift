@@ -24,7 +24,7 @@ struct Matchgarden {
     
     mutating func command(from data: Data) -> Data {
         let request = try! JSONDecoder().decode(Request.self, from: data)
-        
+        print("incoming request: \(request)")
         switch request.type {
         case .pingServer:
             var responce = Response(domain: .serverStatus)
