@@ -41,21 +41,29 @@ public struct ServerDataOneFunction {
         queue.async {
             
             keyinput: while true {
-                print("input message...")
+                print("input command:")
                 let message = readLine()
                 guard let line = message else { continue keyinput }
-                for item in sockets {
-                    do {
-                        
-                        let bee = YardMessage(from: "Moderator", text: line)
-                        let encoder = JSONEncoder()
-                        let data = try! encoder.encode(bee)
-                        
-                        try item.write(from: data)
-                    } catch let error {
-                        print(error)
-                        continue keyinput
+                switch line {
+                case "send text":
+                    print("input message to send:")
+                    let texttosend = readLine()
+                    guard let unwraptext = texttosend else { continue keyinput }
+                    var messageResponse = Response(domain: .textMessage)
+                    messageResponse.text = "text from Moderator: \(unwraptext)"
+                    let encoder = JSONEncoder()
+                    let data = try! encoder.encode(messageResponse)
+                    for item in sockets {
+                        do {
+                            try item.write(from: data)
+                        } catch let error {
+                            print(error)
+                            continue keyinput
+                        }
                     }
+                case "create match": 
+                    print("try to create match")
+                default: break
                 }
             }
         }

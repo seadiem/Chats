@@ -1,5 +1,4 @@
 import Foundation
-import Packet
 
 
 struct Matchgarden {
@@ -31,8 +30,18 @@ struct Matchgarden {
             responce.status = state.network
             return encode(request: responce)
         case .needMatch:
-            let responce = Response(domain: .error)
-            return encode(request: responce)
+            switch state {
+            case .empty: break
+            case .matching(let match): break
+            case .onePlayerRequesting(let waitingplayer):
+                let match = ServerMatch(players: [waitingplayer, request.player])
+                let out = State.matching(match)
+                state = out
+                var responce = Response(domain: .matchCreatedWaitingPlayers)
+                responce.status = state.network
+                return encode(request: responce)
+            }
+            fallthrough
         default:
             let responce = Response(domain: .error)
             return encode(request: responce)

@@ -21,8 +21,9 @@ public enum ServerStatus: Int, Codable {
 public struct Request: Codable {
     public enum RequestIntent: Int, Codable {
         case needMatch
-        case matchData
+        case takeYourMatchData
         case pingServer
+        case createMatch
     }
     public var type: RequestIntent
     public var player: ServerPlayer
@@ -38,12 +39,14 @@ public struct Response: Codable {
         case serverStatus
         case matchCreatedWaitingPlayers
         case readyToMatch
-        case matchData
+        case matchDataFromOtherlayer
+        case textMessage
         case error
     }
     
     public let domain: Domain
     public var status: ServerStatus?
+    public var text: String?
     
     public init(domain: Domain) {
         self.domain = domain

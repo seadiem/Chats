@@ -1,8 +1,7 @@
 import ChatYard
 import Foundation
-import Packet
 
-struct App {
+public struct NetworkApp {
 
     
     let player: ServerPlayer
@@ -10,7 +9,7 @@ struct App {
     let client: ChatClientData
     
     
-    init() throws {
+    public init() throws {
         player = ServerPlayer(name: "Ivan")
         client = try ChatClientData() { data in 
             let decoder = JSONDecoder()
@@ -19,7 +18,7 @@ struct App {
         }
     }
     
-    func play() {
+    public func play() {
         
         DispatchQueue.global().async {
             self.client.listen()
@@ -72,7 +71,7 @@ public struct ChatClientData {
 struct AppTest {
     func run() {
         do {
-            let app = try App()
+            let app = try NetworkApp()
             app.play()
         } catch let error {
             print(error)
