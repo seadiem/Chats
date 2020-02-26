@@ -24,9 +24,14 @@ public struct ServerDataOneFunction {
               
                                 let response = model.command(from: data)
                                 
+                                // Если сокет говорит, что ждёт матч, и на сервере уже есть тот, кто ждёт матч,
+                                // то создаём матч и и отсылаем ответ всем сокетам, что матч создан.
+                                
+                                
                                 for item in sockets {
                                     try item.write(from: response)
                                 }
+                                
                             } catch let error {
                                 print(error)
                             }
@@ -61,8 +66,18 @@ public struct ServerDataOneFunction {
                             continue keyinput
                         }
                     }
-                case "create match": 
-                    print("try to create match")
+                case "need match":
+                    let player = ServerPlayer(name: "Zaur")
+                    let request = Request(type: .needMatch, player: player)
+                    _ = model.command(from: try! JSONEncoder().encode(request))
+                    print("try to need match")
+                case "ping":
+                    let player = ServerPlayer(name: "Ivan")
+                    let request = Request(type: .pingServer, player: player)
+                    let dataanswer = model.command(from: try! JSONEncoder().encode(request))
+                    let decoder = JSONDecoder()
+                    let response = try! decoder.decode(Response.self, from: dataanswer)
+                    print("response: \(response)")
                 default: break
                 }
             }

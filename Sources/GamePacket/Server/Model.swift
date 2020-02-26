@@ -4,13 +4,25 @@ import Foundation
 struct Matchgarden {
     
     enum State {
+        
         case empty
         case onePlayerRequesting(ServerPlayer)
         case matching(ServerMatch)
-        var network: ServerStatus {
+        
+        var response: Response {
             switch self {
-            case .empty: return .hold
-            default: return .creatingMatch
+            case .empty:
+                var response = Response(domain: .gameState)
+                response.status = ServerStatus.hold
+                return response
+            case .matching(_):
+                var response = Response(domain: .gameState)
+                response.status = ServerStatus.hold
+                return response
+            case .onePlayerRequesting:
+                var response = Response(domain: .gameState)
+                response.status = ServerStatus.creatingMatch
+                return response
             }
         }
     }
@@ -23,28 +35,42 @@ struct Matchgarden {
     
     mutating func command(from data: Data) -> Data {
         let request = try! JSONDecoder().decode(Request.self, from: data)
-        print("incoming request: \(request)")
+//        print("incoming request: \(request)")
         switch request.type {
         case .pingServer:
-            var responce = Response(domain: .serverStatus)
-            responce.status = state.network
+            var responce = Response(domain: .textMessage)
+            responce.text = "\(state)"
             return encode(request: responce)
         case .needMatch:
             switch state {
-            case .empty: break
-            case .matching(let match): break
+            case .empty: 
+                state = .onePlayerRequesting(request.player)
+                return encode(request: state.response)
             case .onePlayerRequesting(let waitingplayer):
-                let match = ServerMatch(players: [waitingplayer, request.player])
-                let out = State.matching(match)
-                state = out
-                var responce = Response(domain: .matchCreatedWaitingPlayers)
-                responce.status = state.network
-                return encode(request: responce)
+                let first = request.player
+                let second = waitingplayer
+                let match = ServerMatch(players: [first, second])
+                state = .matching(match)
+                return encode(request: state.response)
+            case .matching(let match):
+                var players = match.players
+                players.insert(request.player)
+                let updatematch = ServerMatch(players: players)
+                state = .matching(updatematch)
+                return encode(request: state.response)
             }
-            fallthrough
-        default:
-            let responce = Response(domain: .error)
-            return encode(request: responce)
+        case .takeYourMatchData:
+            switch state {
+            case .matching:
+                var response = Response(domain: .gameState)
+                let gamedata = GameData(owner: request.player, data: request.data!)
+                response.gameData = gamedata
+                return encode(request: response)
+            default: 
+                let response = Response(domain: .error)
+                print("no match")
+                return encode(request: response)
+            }
         }
         
     }
