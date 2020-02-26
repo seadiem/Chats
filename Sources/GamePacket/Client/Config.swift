@@ -10,7 +10,9 @@ public struct NetworkApp {
     
     
     public init() throws {
-        player = ServerPlayer(name: "Ivan")
+        print("input name:")
+        let name = readLine()
+        player = ServerPlayer(name: name!)
         client = try ChatClientData() { data in 
             let decoder = JSONDecoder()
             let response = try! decoder.decode(Response.self, from: data)
@@ -18,25 +20,43 @@ public struct NetworkApp {
         }
     }
     
-    public func play() {
-        
+    public func listen() {
         DispatchQueue.global().async {
             self.client.listen()
         }
-        
+    }
+    
+    
+    public func send(command: String) {
+        switch command {
+        case "ping":
+            let request = Request(type: .pingServer, player: player)
+            let data = try! JSONEncoder().encode(request)
+            client.send(data: data)
+        case "need match":
+            let request = Request(type: .needMatch, player: player)
+            let data = try! JSONEncoder().encode(request)
+            client.send(data: data)
+        case "game data":
+            var request = Request(type: .takeYourMatchData, player: player)
+            request.data = "Gameplay".data(using: .utf8)
+            let data = try! JSONEncoder().encode(request)
+            client.send(data: data)
+        default: break }
+    }
+    
+    public func startKeyboard() {
         while true {
             print("input command...")
             let line = readLine()
             guard let command = line else { return }
-            switch command {
-            case "ping":
-                let request = Request(type: .pingServer, player: player)
-                let data = try! JSONEncoder().encode(request)
-                client.send(data: data)
-            default: break
-            }
+            send(command: command)
         }
-        
+    }
+    
+    public func play() {
+        listen()
+        startKeyboard()
     }
 }
 

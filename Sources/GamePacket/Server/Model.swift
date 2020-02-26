@@ -17,7 +17,7 @@ struct Matchgarden {
                 return response
             case .matching(_):
                 var response = Response(domain: .gameState)
-                response.status = ServerStatus.hold
+                response.status = ServerStatus.matching
                 return response
             case .onePlayerRequesting:
                 var response = Response(domain: .gameState)
@@ -33,14 +33,17 @@ struct Matchgarden {
         state = .empty
     }
     
+    mutating func reset() {
+        state = .empty
+    }
+    
     mutating func command(from data: Data) -> Data {
         let request = try! JSONDecoder().decode(Request.self, from: data)
-//        print("incoming request: \(request)")
         switch request.type {
         case .pingServer:
-            var responce = Response(domain: .textMessage)
-            responce.text = "\(state)"
-            return encode(request: responce)
+            var response = Response(domain: .textMessage)
+            response.text = "\(state)"
+            return encode(request: response)
         case .needMatch:
             switch state {
             case .empty: 

@@ -50,6 +50,7 @@ public struct ServerDataOneFunction {
                 let message = readLine()
                 guard let line = message else { continue keyinput }
                 switch line {
+                case "reset": break
                 case "send text":
                     print("input message to send:")
                     let texttosend = readLine()
