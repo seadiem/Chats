@@ -54,7 +54,7 @@ public struct Response: Codable {
 }
 
 public struct GameData: Codable {
-    let owner: ServerPlayer
-    let data: Data
+    public let owner: ServerPlayer
+    public let data: Data
 }
 

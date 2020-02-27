@@ -26,7 +26,6 @@ public struct NetworkApp {
         }
     }
     
-    
     public func send(command: String) {
         switch command {
         case "ping":
