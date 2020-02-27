@@ -90,6 +90,7 @@ public struct ServerDataOneFunction {
             meetsocket: while true {
                 let newSocket = try kennel.serverSocket.acceptClientConnection() // ждём клиент
                 sockets.append(newSocket)
+                print("socket was appended")
             }
         } catch let error {
             print(error)

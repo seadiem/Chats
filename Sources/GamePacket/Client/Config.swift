@@ -44,6 +44,13 @@ public struct NetworkApp {
         default: break }
     }
     
+    public func send(game data: Data) {
+        var request = Request(type: .takeYourMatchData, player: player)
+        request.data = data
+        let outdata = try! JSONEncoder().encode(request)
+        client.send(data: outdata)
+    }
+    
     public func startKeyboard() {
         while true {
             print("input command...")
