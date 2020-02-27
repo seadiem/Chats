@@ -9,14 +9,14 @@ public struct NetworkApp {
     let client: ChatClientData
     
     
-    public init() throws {
+    public init(listener: @escaping (Response) -> Void) throws {
         print("input name:")
         let name = readLine()
         player = ServerPlayer(name: name!)
         client = try ChatClientData() { data in 
             let decoder = JSONDecoder()
             let response = try! decoder.decode(Response.self, from: data)
-            print("response: \(response)")
+            listener(response)
         }
     }
     
@@ -97,7 +97,7 @@ public struct ChatClientData {
 struct AppTest {
     func run() {
         do {
-            let app = try NetworkApp()
+            let app = try NetworkApp { _ in }
             app.play()
         } catch let error {
             print(error)
