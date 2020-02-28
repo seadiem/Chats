@@ -12,12 +12,18 @@ public struct NetworkApp {
     public init(listener: @escaping (Response) -> Void) throws {
         print("input name:")
         let name = readLine()
-        player = ServerPlayer(name: name!)
+        let player = ServerPlayer(name: name!)
         client = try ChatClientData() { data in 
             let decoder = JSONDecoder()
             let response = try! decoder.decode(Response.self, from: data)
-            listener(response)
+            switch response.domain {
+            case .gameState:
+                guard let gamedata = response.gameData else { break }
+                if gamedata.owner != player { listener(response) }
+            default: listener(response)
+            }
         }
+        self.player = player
     }
     
     public func listen() {
