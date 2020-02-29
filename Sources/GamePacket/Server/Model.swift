@@ -22,8 +22,7 @@ struct Matchgarden {
         state = .empty
     }
     
-    mutating func command(from data: Data) -> Data {
-        let request = try! JSONDecoder().decode(Request.self, from: data)
+    mutating func handle(request: Request) -> Data {
         switch request.type {
         case .pingServer:
             var response = Response(domain: .serverState)
@@ -95,7 +94,17 @@ struct Matchgarden {
                 return encode(request: response)
             }
         }
-        
+    }
+    
+    mutating func command(from data: Data) -> Data {
+        do {
+            let request = try JSONDecoder().decode(Request.self, from: data)
+            return handle(request: request)
+        } catch let error {
+            var response = Response(domain: .error)
+            response.text = "\(error)"
+            return encode(request: response)
+        }
     }
     
     func encode<Item: Codable>(request: Item) -> Data {
