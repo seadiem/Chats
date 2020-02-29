@@ -15,16 +15,21 @@ public struct NetworkApp {
         let player = ServerPlayer(name: name!)
         client = try ChatClientData() { data in 
             let decoder = JSONDecoder()
-            let response = try! decoder.decode(Response.self, from: data)
-            switch response.domain {
-            case .serverState:
-                switch response.serverState {
-                case .matching:
-                    guard let gamedata = response.gameData else { print("no game data"); break }
-                    if gamedata.owner != player { listener(response) }
+            
+            do {
+                let response = try decoder.decode(Response.self, from: data)
+                switch response.domain {
+                case .serverState:
+                    switch response.serverState {
+                    case .matching:
+                        guard let gamedata = response.gameData else { print("no game data"); break }
+                        if gamedata.owner != player { listener(response) }
+                    default: listener(response)
+                    }
                 default: listener(response)
                 }
-            default: listener(response)
+            } catch let error {
+                print(error)
             }
         }
         self.player = player
