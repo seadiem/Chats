@@ -81,11 +81,13 @@ struct Matchgarden {
                 var response = Response(domain: .serverState)
                 let gamedata = GameData(owner: request.player, data: request.data!)
                 response.gameData = gamedata
+                response.serverState = .matching
                 return encode(request: response)
             case .matching:
                 var response = Response(domain: .serverState)
                 let gamedata = GameData(owner: request.player, data: request.data!)
                 response.gameData = gamedata
+                response.serverState = .matching
                 return encode(request: response)
             default: 
                 let response = Response(domain: .error)
