@@ -29,22 +29,24 @@ public struct Request: Codable {
     }
 }
 
-public enum ServerStatus: Int, Codable {
-    case hold
-    case creatingMatch
-    case matching
-}
-
 public struct Response: Codable {
     
     public enum Domain: Int, Codable {
-        case gameState
+        case serverState
         case textMessage
         case error
     }
     
+    public enum ServerState: Int, Codable {
+        case hold
+        case creatingMatch
+        case matchStarted
+        case matchFinished
+        case matching
+    }
+    
     public let domain: Domain
-    public var status: ServerStatus?
+    public var serverState: ServerState?
     public var gameData: GameData?
     public var text: String?
     

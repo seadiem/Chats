@@ -17,9 +17,13 @@ public struct NetworkApp {
             let decoder = JSONDecoder()
             let response = try! decoder.decode(Response.self, from: data)
             switch response.domain {
-            case .gameState:
-                guard let gamedata = response.gameData else { break }
-                if gamedata.owner != player { listener(response) }
+            case .serverState:
+                switch response.serverState {
+                case .matching:
+                    guard let gamedata = response.gameData else { print("no game data"); break }
+                    if gamedata.owner != player { listener(response) }
+                default: listener(response)
+                }
             default: listener(response)
             }
         }

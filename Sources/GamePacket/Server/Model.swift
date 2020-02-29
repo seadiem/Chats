@@ -7,24 +7,9 @@ struct Matchgarden {
         
         case empty
         case onePlayerRequesting(ServerPlayer)
+        case matchStarted(ServerMatch)
         case matching(ServerMatch)
-        
-        var response: Response {
-            switch self {
-            case .empty:
-                var response = Response(domain: .gameState)
-                response.status = ServerStatus.hold
-                return response
-            case .matching(_):
-                var response = Response(domain: .gameState)
-                response.status = ServerStatus.matching
-                return response
-            case .onePlayerRequesting:
-                var response = Response(domain: .gameState)
-                response.status = ServerStatus.creatingMatch
-                return response
-            }
-        }
+        case matchFinished(ServerMatch)
     }
     
     var state: State
@@ -41,31 +26,64 @@ struct Matchgarden {
         let request = try! JSONDecoder().decode(Request.self, from: data)
         switch request.type {
         case .pingServer:
-            var response = Response(domain: .textMessage)
+            var response = Response(domain: .serverState)
+            switch state {
+            case .empty: response.serverState = .hold
+            case .onePlayerRequesting: response.serverState = .creatingMatch
+            case .matchStarted: response.serverState = .matchStarted
+            case .matching: response.serverState = .matching
+            case .matchFinished: response.serverState = .matchFinished
+            }
             response.text = "\(state)"
             return encode(request: response)
         case .needMatch:
             switch state {
             case .empty: 
                 state = .onePlayerRequesting(request.player)
-                return encode(request: state.response)
+                var response = Response(domain: .serverState)
+                response.serverState = .creatingMatch
+                response.text = "\(state)"
+                return encode(request: response)
             case .onePlayerRequesting(let waitingplayer):
                 let first = request.player
                 let second = waitingplayer
                 let match = ServerMatch(players: [first, second])
+                state = .matchStarted(match)
+                var response = Response(domain: .serverState)
+                response.serverState = .matching
+                response.text = "\(state)"
+                return encode(request: response)
+            case .matchStarted(let match):
                 state = .matching(match)
-                return encode(request: state.response)
+                var response = Response(domain: .serverState)
+                response.serverState = .matching
+                response.text = "\(state)"
+                return encode(request: response)
             case .matching(let match):
                 var players = match.players
                 players.insert(request.player)
                 let updatematch = ServerMatch(players: players)
                 state = .matching(updatematch)
-                return encode(request: state.response)
+                var response = Response(domain: .serverState)
+                response.serverState = .matching
+                response.text = "\(state)"
+                return encode(request: response)
+            case .matchFinished:
+                state = .empty
+                var response = Response(domain: .serverState)
+                response.serverState = .hold
+                return encode(request: response)
             }
         case .takeYourMatchData:
             switch state {
+            case .matchStarted(let match):
+                state = .matching(match)
+                var response = Response(domain: .serverState)
+                let gamedata = GameData(owner: request.player, data: request.data!)
+                response.gameData = gamedata
+                return encode(request: response)
             case .matching:
-                var response = Response(domain: .gameState)
+                var response = Response(domain: .serverState)
                 let gamedata = GameData(owner: request.player, data: request.data!)
                 response.gameData = gamedata
                 return encode(request: response)
