@@ -62,11 +62,6 @@ public struct NetworkApp {
         default: break }
     }
     
-    
-    public func send<Element>(response: ResponseGen<Element>) {
-        
-    }
-    
     public func send(game data: Data) {
         var request = Request(type: .takeYourMatchData, player: player)
         request.data = data
