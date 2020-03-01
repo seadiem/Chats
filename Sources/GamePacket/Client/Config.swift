@@ -15,7 +15,7 @@ public struct NetworkApp {
         let player = ServerPlayer(name: name!)
         client = try ChatClientData() { data in 
             let decoder = JSONDecoder()
-            
+            print("packet in Client")
             do {
                 let response = try decoder.decode(Response.self, from: data)
                 switch response.domain {
@@ -59,6 +59,11 @@ public struct NetworkApp {
             let data = try! JSONEncoder().encode(request)
             client.send(data: data)
         default: break }
+    }
+    
+    
+    public func send<Element>(response: ResponseGen<Element>) {
+        
     }
     
     public func send(game data: Data) {

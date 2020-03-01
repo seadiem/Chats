@@ -29,6 +29,21 @@ public struct Request: Codable {
     }
 }
 
+public struct RequestGen: Codable {
+    public enum RequestIntent: Int, Codable {
+        case needMatch
+        case takeYourMatchData
+        case pingServer
+    }
+    public var type: RequestIntent
+    public var player: ServerPlayer
+    public var data: Data?
+    public init(type: RequestIntent, player: ServerPlayer) {
+        self.type = type
+        self.player = player
+    }
+}
+
 public struct Response: Codable {
     
     public enum Domain: Int, Codable {
