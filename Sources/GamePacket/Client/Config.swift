@@ -64,8 +64,14 @@ public struct NetworkApp {
     public func send(game data: Data) {
         var request = Request(type: .takeYourMatchData, player: player)
         request.data = data
-        let outdata = try! JSONEncoder().encode(request)
-        client.send(data: outdata)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let outdata = try encoder.encode(request)
+            client.send(data: outdata)
+        } catch {
+            print("coding error")
+        }
     }
     
     public func startKeyboard() {
