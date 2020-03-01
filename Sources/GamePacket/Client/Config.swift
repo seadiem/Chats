@@ -18,6 +18,7 @@ public struct NetworkApp {
             print("packet in Client")
             do {
                 let response = try decoder.decode(Response.self, from: data)
+                print("response in client: \(response)")
                 switch response.domain {
                 case .serverState:
                     switch response.serverState {
