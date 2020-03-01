@@ -30,6 +30,8 @@ public struct NetworkApp {
                 }
             } catch let error {
                 print(error)
+                guard let string = String(bytes: data, encoding: .utf8) else { return }
+                print("string: \(string)")
             }
         }
         self.player = player
