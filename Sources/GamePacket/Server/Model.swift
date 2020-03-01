@@ -102,6 +102,10 @@ struct Matchgarden {
             return handle(request: request)
         } catch let error {
             var response = Response(domain: .error)
+            print("here")
+            print("error: \(error)")
+            let string = String(bytes: data, encoding: .utf8)
+            print("data: \(string as Any)")
             response.text = "\(error)"
             return encode(request: response)
         }

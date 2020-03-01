@@ -17,12 +17,12 @@ public struct ServerDataOneFunction {
                     socketsbrowcast.async {
                         while true {
                             do {
-                                
-                                var data = Data()
-                                _ = try item.read(into: &data)
+                                var readData = Data(capacity: 4096)
+  //                              var data = Data()
+                                _ = try item.read(into: &readData)
                                 
               
-                                let response = model.command(from: data)
+                                let response = model.command(from: readData)
                                 
                                 // Если сокет говорит, что ждёт матч, и на сервере уже есть тот, кто ждёт матч,
                                 // то создаём матч и и отсылаем ответ всем сокетам, что матч создан.
