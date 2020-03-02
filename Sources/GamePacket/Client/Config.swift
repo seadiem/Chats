@@ -22,8 +22,8 @@ public struct NetworkApp {
                 switch response.domain {
                 case .serverState:
                     switch response.serverState {
-                    case .matching:
-                        guard let gamedata = response.gameData else { print("no game data"); break }
+                    case .matching, .matchStarted:
+                        guard let gamedata = response.gameData else { print("no game data"); fallthrough }
                         if gamedata.owner != player { listener(response) }
                     default: listener(response)
                     }

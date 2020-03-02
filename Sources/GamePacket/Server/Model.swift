@@ -49,7 +49,7 @@ struct Matchgarden {
                 let match = ServerMatch(players: [first, second])
                 state = .matchStarted(match)
                 var response = Response(domain: .serverState)
-                response.serverState = .matching
+                response.serverState = .matchStarted
                 response.text = "\(state)"
                 return encode(request: response)
             case .matchStarted(let match):
