@@ -15,10 +15,10 @@ public struct NetworkApp {
         let player = ServerPlayer(name: name!)
         client = try ChatClientData() { data in 
             let decoder = JSONDecoder()
-            print("packet in Client")
+ //           print("packet in Client")
             do {
                 let response = try decoder.decode(Response.self, from: data)
-                print("response in client: \(response)")
+  //              print("response in client: \(response)")
                 switch response.domain {
                 case .serverState:
                     switch response.serverState {
