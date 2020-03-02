@@ -102,7 +102,7 @@ public struct ChatClientData {
     
     public func send(data: Data) {
         
-        let string = String(bytes: data, encoding: .utf8)
+//        let string = String(bytes: data, encoding: .utf8)
 //        print("To Leash data is: \(string as Any)")
         
         do { try leash.clientSocket.write(from: data) }
