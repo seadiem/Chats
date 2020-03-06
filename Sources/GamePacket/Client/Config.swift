@@ -9,10 +9,18 @@ public struct NetworkApp {
     let client: ChatClientData
     
     
-    public init(listener: @escaping (Response) -> Void) throws {
-        print("input name:")
-        let name = readLine()
-        let player = ServerPlayer(name: name!)
+    public init(inputname: String? = nil, listener: @escaping (Response) -> Void) throws {
+        
+        let player: ServerPlayer
+        
+        if let unwrapname = inputname {
+            player = ServerPlayer(name: unwrapname)
+        } else {
+            print("input name:")
+            let name = readLine()
+            player = ServerPlayer(name: name!)
+        }
+        
         client = try ChatClientData() { data in 
             let decoder = JSONDecoder()
  //           print("packet in Client")
