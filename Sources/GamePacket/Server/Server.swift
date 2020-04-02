@@ -28,8 +28,18 @@ public struct ServerDataOneFunction {
                                 // то создаём матч и и отсылаем ответ всем сокетам, что матч создан.
                                 
                                 
+//                                for item in sockets {
+//                                    try item.write(from: response)
+//                                }
+                                
                                 for item in sockets {
-                                    try item.write(from: response)
+                                    DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(500)) { 
+                                        do {
+                                            try item.write(from: response)
+                                        } catch let error {
+                                            print(error)
+                                        }
+                                    }
                                 }
                                 
                             } catch let error {
