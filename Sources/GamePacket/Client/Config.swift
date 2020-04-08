@@ -98,6 +98,7 @@ public struct NetworkApp {
     }
 }
 
+
 public struct ChatClientData {
     
     let leash: Leash
