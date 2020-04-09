@@ -101,7 +101,7 @@ public struct Connection {
         }
     }
     
-    public func sendDry(data: Data) {
+    func sendDry(data: Data) {
         do { try leash.clientSocket.write(from: data) }
         catch let error { print(error) }
     }
