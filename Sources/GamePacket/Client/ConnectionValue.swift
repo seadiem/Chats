@@ -15,7 +15,7 @@ public struct Connection {
     let player: ServerPlayer
     var match: ServerMatch?
     let leash: Leash
-    var listener: ((Response) -> Void)?
+    public var listener: ((Response) -> Void)?
     
     
     public init(inputname: String? = nil) throws {
