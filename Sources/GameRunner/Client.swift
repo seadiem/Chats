@@ -11,4 +11,9 @@ struct ClientRunner {
         }
         
     }
+    
+    func connectionRun() {
+        
+    }
+    
 }
