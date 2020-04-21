@@ -15,7 +15,7 @@ public struct ServerDataOneFunction {
                 for item in sockets {
                     let socketsbrowcast = DispatchQueue(label: "\(item.socketfd)")
                     socketsbrowcast.async {
-                        while true {
+                        sockettlistener: while true {
                             do {
                                 var readData = Data(capacity: 4096)
   //                              var data = Data()
@@ -33,7 +33,7 @@ public struct ServerDataOneFunction {
 //                                }
                                 
                                 for item in sockets {
-                                    DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(1000)) { 
+                                    DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(4000)) { 
                                         do {
                                             try item.write(from: response)
                                         } catch let error {
@@ -44,6 +44,7 @@ public struct ServerDataOneFunction {
                                 
                             } catch let error {
                                 print(error)
+                                break sockettlistener
                             }
                         }
                     }
