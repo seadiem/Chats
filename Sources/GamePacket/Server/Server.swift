@@ -33,7 +33,7 @@ public struct ServerDataOneFunction {
 //                                }
                                 
                                 for item in sockets {
-                                    DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(4000)) { 
+                                    DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(200)) { 
                                         do {
                                             try item.write(from: response)
                                         } catch let error {
