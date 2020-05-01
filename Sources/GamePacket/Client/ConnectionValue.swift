@@ -85,6 +85,10 @@ public struct Connection {
             request.data = "Gameplay".data(using: .utf8)
             let data = try! JSONEncoder().encode(request)
             sendDry(data: data)
+        case "players":
+            let request = Request(type: .players, player: player)
+            let data = try! JSONEncoder().encode(request)
+            sendDry(data: data)
         default: break }
     }
     
@@ -105,5 +109,6 @@ public struct Connection {
         do { try leash.clientSocket.write(from: data) }
         catch let error { print(error) }
     }
+    
     
 }

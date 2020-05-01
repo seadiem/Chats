@@ -90,6 +90,13 @@ public struct ServerDataOneFunction {
                     let decoder = JSONDecoder()
                     let response = try! decoder.decode(Response.self, from: dataanswer)
                     print("response: \(response)")
+                case "players":
+                    let player = ServerPlayer(name: "Zaur")
+                    let request = Request(type: .players, player: player)
+                    let dataanswer = model.command(from: try! JSONEncoder().encode(request))
+                    let decoder = JSONDecoder()
+                    let response = try! decoder.decode(Response.self, from: dataanswer)
+                    print("response: \(response)")
                 default: break
                 }
             }
