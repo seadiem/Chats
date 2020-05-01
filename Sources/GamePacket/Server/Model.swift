@@ -61,12 +61,14 @@ struct Matchgarden {
                 var response = Response(domain: .serverState)
                 response.serverState = .matchStarted
                 response.text = "\(state)"
+                response.players = Array(match.players)
                 return encode(request: response)
             case .matchStarted(let match):
                 state = .matching(match)
                 var response = Response(domain: .serverState)
                 response.serverState = .matching
                 response.text = "\(state)"
+                response.players = Array(match.players)
                 return encode(request: response)
             case .matching(let match):
                 var players = match.players
@@ -76,6 +78,7 @@ struct Matchgarden {
                 var response = Response(domain: .serverState)
                 response.serverState = .matching
                 response.text = "\(state)"
+                response.players = Array(match.players)
                 return encode(request: response)
             case .matchFinished:
                 state = .empty
