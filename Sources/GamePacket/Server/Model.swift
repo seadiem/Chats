@@ -24,6 +24,16 @@ struct Matchgarden {
     
     mutating func handle(request: Request) -> Data {
         switch request.type {
+        case .players:
+            var response = Response(domain: .players)
+            switch state {
+            case .matching(let match):
+                response.players = Array(match.players)
+            case .matchStarted(let match):
+                response.players = Array(match.players)
+            default: break
+            }
+            return encode(request: response)
         case .pingServer:
             var response = Response(domain: .serverState)
             switch state {

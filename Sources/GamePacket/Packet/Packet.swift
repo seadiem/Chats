@@ -19,6 +19,7 @@ public struct Request: Codable {
         case needMatch
         case takeYourMatchData
         case pingServer
+        case players
     }
     public var type: RequestIntent
     public var player: ServerPlayer
@@ -33,6 +34,7 @@ public struct Request: Codable {
 public struct Response: Codable {
     
     public enum Domain: Int, Codable {
+        case players
         case serverState
         case textMessage
         case error
@@ -50,6 +52,7 @@ public struct Response: Codable {
     public var serverState: ServerState?
     public var gameData: GameData?
     public var text: String?
+    public var players: [ServerPlayer]?
     
     public init(domain: Domain) {
         self.domain = domain
