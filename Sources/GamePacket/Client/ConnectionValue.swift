@@ -95,7 +95,7 @@ public struct Connection {
     public func send(game data: Data) {
         var request = Request(type: .takeYourMatchData, player: player)
         request.data = data
-        print("connection request: \(request)")
+  //      print("connection request: \(request)")
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         do {
