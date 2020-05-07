@@ -12,7 +12,7 @@ struct App {
 
 public struct Connection {
     
-    let player: ServerPlayer
+    public let player: ServerPlayer
     var match: ServerMatch?
     let leash: Leash
     public var listener: ((Response) -> Void)?
