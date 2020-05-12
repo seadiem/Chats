@@ -20,6 +20,7 @@ public struct Request: Codable {
         case takeYourMatchData
         case pingServer
         case players
+        case disconnectMe
     }
     public var type: RequestIntent
     public var player: ServerPlayer

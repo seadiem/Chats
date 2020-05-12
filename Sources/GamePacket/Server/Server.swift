@@ -18,22 +18,15 @@ public struct ServerDataOneFunction {
                         sockettlistener: while true {
                             do {
                                 var readData = Data(capacity: 4096)
-  //                              var data = Data()
                                 _ = try item.read(into: &readData)
                                 
-              
                                 let response = model.command(from: readData)
                                 
                                 // Если сокет говорит, что ждёт матч, и на сервере уже есть тот, кто ждёт матч,
                                 // то создаём матч и и отсылаем ответ всем сокетам, что матч создан.
                                 
-                                
-//                                for item in sockets {
-//                                    try item.write(from: response)
-//                                }
-                                
                                 for item in sockets {
-                                    DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(2000)) { 
+                                    DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(4000)) { 
                                         do {
                                             try item.write(from: response)
                                         } catch let error {

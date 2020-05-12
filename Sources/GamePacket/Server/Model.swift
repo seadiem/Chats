@@ -9,7 +9,6 @@ struct Matchgarden {
         case onePlayerRequesting(ServerPlayer)
         case matchStarted(ServerMatch)
         case matching(ServerMatch)
-        case matchFinished(ServerMatch)
     }
     
     var state: State
@@ -41,7 +40,6 @@ struct Matchgarden {
             case .onePlayerRequesting: response.serverState = .creatingMatch
             case .matchStarted: response.serverState = .matchStarted
             case .matching: response.serverState = .matching
-            case .matchFinished: response.serverState = .matchFinished
             }
             response.text = "\(state)"
             return encode(request: response)
@@ -80,11 +78,6 @@ struct Matchgarden {
                 response.text = "\(state)"
                 response.players = Array(match.players)
                 return encode(request: response)
-            case .matchFinished:
-                state = .empty
-                var response = Response(domain: .serverState)
-                response.serverState = .hold
-                return encode(request: response)
             }
         case .takeYourMatchData:
             switch state {
@@ -106,6 +99,11 @@ struct Matchgarden {
                 print("no match")
                 return encode(request: response)
             }
+        case .disconnectMe:
+            reset()
+            var response = Response(domain: .serverState)
+            response.serverState = .matchFinished
+            return encode(request: response)
         }
     }
     

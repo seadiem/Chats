@@ -89,6 +89,10 @@ public struct Connection {
             let request = Request(type: .players, player: player)
             let data = try! JSONEncoder().encode(request)
             sendDry(data: data)
+        case "disconnect":
+            let request = Request(type: .disconnectMe, player: player)
+            let data = try! JSONEncoder().encode(request)
+            sendDry(data: data)
         default: break }
     }
     
