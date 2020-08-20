@@ -15,7 +15,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         
-        .package( url: "https://github.com/JohnSundell/Files.git", .branch("master")),
+        .package( url: "https://github.com/seadiem/Files", .branch("AddDocumentsIOS")),
         .package( url: "https://github.com/IBM-Swift/BlueSocket.git", .branch("master"))
         
     ],

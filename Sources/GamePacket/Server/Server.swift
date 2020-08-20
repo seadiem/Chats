@@ -26,7 +26,7 @@ public struct ServerDataOneFunction {
                                 // то создаём матч и и отсылаем ответ всем сокетам, что матч создан.
                                 
                                 for item in sockets {
-                                    DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(2000)) { 
+                                    DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(500)) { 
                                         do {
                                             try item.write(from: response)
                                         } catch let error {
@@ -36,7 +36,7 @@ public struct ServerDataOneFunction {
                                 }
                                 
                             } catch let error {
-                                print(error)
+                                assertionFailure("\(error)")
                                 break sockettlistener
                             }
                         }
