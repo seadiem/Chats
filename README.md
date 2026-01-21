@@ -1,7 +1,6 @@
 # Chat
 
 Этот репозиторий затевается для отработки передачи кусков и склейки даты между процессами.
-This repositiry is inintiated for working within IPC cases.
 
 ## Broadcast Chat
 
